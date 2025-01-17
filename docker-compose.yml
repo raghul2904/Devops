@@ -1,0 +1,7 @@
+version: '3' 
+services: 
+   mydeployment: 
+     image: "sowmyadevop/dev:mydeployment" 
+     container_name: "myreactapp" 
+     ports: 
+        -"80:80"

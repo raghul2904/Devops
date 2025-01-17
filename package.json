@@ -1,0 +1,28 @@
+{
+  "name": "devops-build",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sowmya941/MyDevopsbuild.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sowmya941/MyDevopsbuild/issues"
+  },
+  "homepage": "https://github.com/Sowmya941/MyDevopsbuild#readme",
+  "description": "",
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-scripts": "^3.0.1"
+  }
+}

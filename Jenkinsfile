@@ -11,7 +11,7 @@ pipeline {
     }
     stage('Build Image') {
       steps {
-        sh 'docker build -t react-app:latest .'
+        sh 'DOCKER_BUILDKIT=1 'docker build -t react-app:latest .'
       }
     }
     stage('Push to Docker Hub') {

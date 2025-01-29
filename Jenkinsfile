@@ -10,10 +10,16 @@ pipeline {
       }
     }
     stage('Build Image') {
-      steps {
-        sh 'docker build -t react-app:latest .'
-      }
+    steps {
+        script {
+            try {
+                sh 'docker build --no-cache -t react-app:latest .'
+            } catch (Exception e) {
+                error "Docker build failed: ${e.message}"
+            }
+        }
     }
+}
     stage('Push to Docker Hub') {
       steps {
         script {

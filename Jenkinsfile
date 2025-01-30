@@ -9,6 +9,13 @@ pipeline {
         git branch: 'dev', credentialsId: 'github-credentials-id', url: 'https://github.com/joe-prakash/devops-build.git'
       }
     }
+    
+        stage('Check Buildx') {
+            steps {
+                sh 'docker buildx version'
+            }
+        }
+    
     stage('Build Image') {
     steps {
         script {

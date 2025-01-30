@@ -1,5 +1,5 @@
 # Use Node.js for building the React app
-FROM node:16-alpine AS build
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -7,6 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
+RUN npm install -g npm@latest  # Updates npm to the latest version
 RUN npm install
 
 # Copy the rest of the application

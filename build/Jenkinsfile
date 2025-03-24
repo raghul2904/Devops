@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_USERCRED = credentials('Dockerhub-cred')
+           }
+    stages {
+        stage('Login to Docker Registry') {
+            steps {
+                script {
+                sh "echo $DOCKER_USERCRED_PSW | docker login -u $DOCKER_USERCRED_USR --password-stdin"
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+               sh 'echo "print build"'
+            }
+        }
+        stage('docker-build') {
+            steps {
+               sh 'echo "Docker Build"'
+               sh 'pwd'
+               sh 'cd build'
+               sh 'ls'
+               sh 'pwd'
+               //sh 'cd ./build# '
+               sh 'pwd'
+               sh 'chmod +x ./build/build.sh ./build/deploy.sh ./stopcontainer.sh'
+               sh 'docker-compose down'
+               //sh 'docker stop $(docker ps)'
+               //sh 'docker rm $(docker ps -a -q)'
+               //sh 'npm install -g serve'
+               sh 'docker images' 
+               sh 'docker ps'
+               sh './stopcontainer.sh'
+               //sh 'docker stop $(docker ps -q)'
+               //sh 'docker build -t my-nginx-app:latest ./build'
+               //sh 'docker run -d -p 80:80 my-nginx-app:v1'
+               //sh 'docker stop react-ecommerce-container'
+               //sh 'docker rm react-ecommerce-container'
+               sh 'docker-compose up --build -d' 
+               sh 'docker ps'
+            }
+        }
+        stage('docker-push') {
+            steps {
+                sh 'echo "Docker Push"'
+                sh 'docker tag devops-guvi-project-production-react-app vijayr2024/reactecommerceprod:latest'
+                sh 'docker push vijayr2024/reactecommerceprod:latest'
+            }
+    }
+}
+}

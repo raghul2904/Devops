@@ -1,0 +1,8 @@
+# .gitignore
+node_modules/
+build/
+*.log
+.dockerignore
+docker-compose.yml
+*.sh
+

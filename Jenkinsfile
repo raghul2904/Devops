@@ -42,7 +42,7 @@ pipeline {
                 echo "✅ Deploy to Production would happen here (via SSH, K8s, or ECS)"
                 // You can run an SSH script here to your EC2 server
             }
-        }
+        } 
     }
 }
 

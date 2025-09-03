@@ -1,0 +1,11 @@
+groups:
+  - name: react-app-alerts
+    rules:
+      - alert: ReactAppDown
+        expr: probe_success{job="react-app-availability"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "React App is DOWN"
+          description: "The React app at {{ $labels.instance }} has been unreachable for more than 1 minute."

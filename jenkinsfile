@@ -1,0 +1,70 @@
+pipeline {
+  agent any
+
+  environment {
+    DOCKERHUB_CRED = credentials('gokulviveka/Gokulkbk@1729') // username/password
+    SSH_CRED = 'ssh-deploy-key'
+    DOCKERHUB_USER = 'gokulviveka'
+    IMAGE_NAME_DEV = "${env.DOCKERHUB_USER}/devops-build-dev"
+    IMAGE_NAME_PROD = "${env.DOCKERHUB_USER}/devops-build-prod"
+    REMOTE_USER = 'ubuntu'
+    REMOTE_HOST = 'YOUR_SERVER_IP'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
+    }
+
+    stage('Build image') {
+      steps {
+        script {
+          sh "docker --version || true"
+          sh "echo ${DOCKERHUB_CRED_PSW} | docker login -u ${DOCKERHUB_CRED_USR} --password-stdin"
+          if (env.BRANCH_NAME == 'dev') {
+             sh "docker build -t ${IMAGE_NAME_DEV}:${BUILD_NUMBER} ."
+             sh "docker tag ${IMAGE_NAME_DEV}:${BUILD_NUMBER} ${IMAGE_NAME_DEV}:latest"
+             sh "docker push ${IMAGE_NAME_DEV}:${BUILD_NUMBER}"
+             sh "docker push ${IMAGE_NAME_DEV}:latest"
+          } else if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'main') {
+             sh "docker build -t ${IMAGE_NAME_PROD}:${BUILD_NUMBER} ."
+             sh "docker tag ${IMAGE_NAME_PROD}:${BUILD_NUMBER} ${IMAGE_NAME_PROD}:latest"
+             sh "docker push ${IMAGE_NAME_PROD}:${BUILD_NUMBER}"
+             sh "docker push ${IMAGE_NAME_PROD}:latest"
+          } else {
+             // fallback - build but do not push
+             sh "docker build -t ${DOCKERHUB_USER}/devops-build:${BUILD_NUMBER} ."
+          }
+        }
+      }
+    }
+
+    stage('Deploy (optional)') {
+      when {
+        anyOf {
+          branch 'master'
+          branch 'main'
+          branch 'dev'
+        }
+      }
+      steps {
+        script {
+          def tag = "${BUILD_NUMBER}"
+          def imageToUse = env.BRANCH_NAME == 'dev' ? "${IMAGE_NAME_DEV}:${tag}" : "${IMAGE_NAME_PROD}:${tag}"
+
+          // Use SSH credentials to pull & deploy on remote
+          sshagent (credentials: [SSH_CRED]) {
+            sh """
+              ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
+                docker pull ${imageToUse} &&
+                docker stop app || true &&
+                docker rm app || true &&
+                docker run -d --name app -p 80:80 --restart unless-stopped ${imageToUse}
+              '
+            """
+          }
+        }
+      }
+    }
+  }
+}

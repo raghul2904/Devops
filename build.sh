@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-IMAGE_NAME="${1:-GOKUL_DOCKERHUB_USER/devops-build}"
+IMAGE_NAME="${1:-gokulviveka/devops-build}"
 TAG="${2:-latest}"
 
 echo "Building ${IMAGE_NAME}:${TAG}"

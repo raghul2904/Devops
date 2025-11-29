@@ -5,7 +5,7 @@ REMOTE_USER="${1:-ubuntu}"
 REMOTE_HOST="${2:-YOUR_SERVER_IP}"
 SSH_KEY="${3:-~/.ssh/id_rsa}"
 COMPOSE_FILE="${4:-docker-compose.yml}"
-IMAGE_NAME="${5:-GOKUL_DOCKERHUB_USER/devops-build}"
+IMAGE_NAME="${5:-gokulviveka/devops-build}"
 TAG="${6:-latest}"
 
 # Tag & push handled by CI normally. Here we pull & run on remote

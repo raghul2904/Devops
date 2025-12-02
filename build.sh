@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
 
-IMAGE_NAME="${1:-gokulviveka/devops-build}"
-TAG="${2:-latest}"
+DOCKER_USER="gokulviveka"
+IMAGE_NAME="devops-build-dev"
+TAG="latest"
 
-echo "Building ${IMAGE_NAME}:${TAG}"
-docker build -t "${IMAGE_NAME}:${TAG}" .
+echo "Building Docker image..."
+docker build -t $DOCKER_USER/$IMAGE_NAME:$TAG .
 
-echo "Done: ${IMAGE_NAME}:${TAG}"
+echo "Done: $DOCKER_USER/$IMAGE_NAME:$TAG"

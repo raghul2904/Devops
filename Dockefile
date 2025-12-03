@@ -1,0 +1,29 @@
+U nano 8.3                                   Dockefile                                   Modified
+# Use official node image (adjust if repo uses another runtime)
+FROM node:18-alpine
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Copy package files first for layer caching
+COPY package*.json ./
+
+# Install deps
+RUN npm ci --only=production
+
+# Copy app source
+COPY . .
+
+# Expose port that app listens on (the app must listen on PORT env)
+EXPOSE 80
+
+# Ensure node uses port 80
+ENV PORT=80
+CMD ["node", "server.js"]
+
+
+
+
+
+
+

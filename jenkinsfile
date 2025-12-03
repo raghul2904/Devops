@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = 'dockerhub-creds-id'   // Jenkins credentials ID for Docker Hub login
+        DOCKERHUB_USER        = 'gokulviveka'
+
+        DEV_IMAGE  = "gokulviveka/devops-build-dev"
+        PROD_IMAGE = "gokulviveka/devops-build-prod"
+
+        EC2_SSH_CRED = 'ec2-ssh-key'                  // Jenkins SSH key credential ID
+        EC2_HOST     = 'ubuntu@3.109.108.43'          // Your EC2 public IP
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Select Target Image') {
+            steps {
+                script {
+                    if (env.BRANCH_NAME == 'dev') {
+                        env.TARGET_IMAGE = env.DEV_IMAGE
+                    } else if (env.BRANCH_NAME == 'master') {
+                        env.TARGET_IMAGE = env.PROD_IMAGE
+                    } else {
+                        error "Pipeline is configured only for dev and master branches."
+                    }
+                }

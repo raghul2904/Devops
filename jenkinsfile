@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    environment {
+        DEV_IMAGE = "raghul2904/dev:latest"
+        PROD_IMAGE = "raghul2904/prod:latest"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: "${env.main}",
+                    url: 'https://github.com/raghul2904/devops-build.git'
+            }
+        }
+
+        stage('Build & Push DEV') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                sh """
+                docker build -t $DEV_IMAGE .
+                docker push $DEV_IMAGE
+                """
+            }
+        }
+
+        stage('Build & Push PROD') {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh """
+                docker build -t $PROD_IMAGE .
+                docker push $PROD_IMAGE
+                """
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh """
+                docker stop app || true
+                docker rm app || true
+                docker run -d --name app -p 80:80 $DEV_IMAGE
+                """
+            }
+        }
+    }
+}

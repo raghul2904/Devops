@@ -10,7 +10,7 @@ pipeline {
             }
         }
 
-        stage('Push DEV') {
+        stage('Push dev') {
             when {
                 branch 'dev'
             }
@@ -22,7 +22,7 @@ pipeline {
             }
         }
 
-        stage('Push PROD') {
+        stage('Push prod') {
             when {
                 branch 'master'
             }

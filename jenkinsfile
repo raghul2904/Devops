@@ -16,7 +16,7 @@ pipeline {
             }
             steps {
                 sh '''
-                dokcer login -u raghul2904 -p dckr_pat_TKxntUEdh2u3Rx-xdu5fDBhncVY
+                docker login -u raghul2904 -p dckr_pat_TKxntUEdh2u3Rx-xdu5fDBhncVY
                 docker tag react-app raghul2904/react-app-dev:latest
                 docker push raghul2904/react-app-dev:latest
                 '''
@@ -29,7 +29,7 @@ pipeline {
             }
             steps {
                 sh '''
-                dokcer login -u raghul2904 -p dckr_pat_TKxntUEdh2u3Rx-xdu5fDBhncVY
+                docker login -u raghul2904 -p dckr_pat_TKxntUEdh2u3Rx-xdu5fDBhncVY
                 docker tag react-app raghul2904/react-app-prod:latest
                 docker push raghul2904/react-app-prod:latest
                 '''

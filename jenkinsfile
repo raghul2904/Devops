@@ -24,7 +24,7 @@ pipeline {
 
         stage('Push prod') {
             when {
-                branch 'master'
+                branch 'main'
             }
             steps {
                 sh '''
